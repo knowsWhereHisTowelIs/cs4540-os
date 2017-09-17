@@ -1,0 +1,44 @@
+
+what is a process?
+  Data struct - aka process control block
+    identifer
+    state
+    priority
+    program counter
+    memory pointers
+    context data
+    i/o status info
+    accounting info
+
+Process terminations
+
+
+Two state process model
+  enter
+    not running
+  dispatch
+    running
+  Pause
+    not running
+  --dispatch
+    running
+      exit
+
+five state process model
+  new - admin
+  ready
+    -> dispatch -> running
+  running
+    -> timeout -> ready
+    -> event wait -> blocked
+    -> release -> exit
+  blocked
+    -> event occurs -> ready
+
+blocked process
+  waiting for long instruction - ex getting stuff from HDD
+
+Suspended process
+  none of process is in main memory but thrown in SWAP disk
+  basically only suspended if blocked processes are full
+  must be explicitly activated to work

@@ -1,0 +1,28 @@
+# https://stackoverflow.com/questions/2481269/how-to-make-a-simple-c-makefile
+# https://stackoverflow.com/questions/3375697/useful-gcc-flags-for-c
+appname := a2
+
+CXX := gcc
+CXXFLAGS := -std=c99 -Wall -Wstrict-prototypes -Wextra
+
+srcfiles := $(shell find . -name "*.c")
+objects  := $(patsubst %.c, %.o, %.gch, $(srcfiles))
+
+all: $(appname)
+
+$(appname): $(objects)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(appname) $(objects) $(LDLIBS)
+
+depend: .depend
+
+.depend: $(srcfiles)
+	rm -f ./.depend
+	$(CXX) $(CXXFLAGS) -MM $^>>./.depend;
+
+clean:
+	rm -f $(objects)
+
+dist-clean: clean
+	rm -f *~ .depend
+
+include .depend

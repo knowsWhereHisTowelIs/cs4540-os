@@ -1,0 +1,95 @@
+CPU Scheduler
+	KNOW differences between nonpreemptive and premtive
+	Short Term Scheduler
+		Selects from process in queue (Gone over in last lecture. Has suspsended/blcoked)
+		Queue can be done many ways
+		Used when:
+			1. switched from running to waiting state
+			2. switches from running to ready
+			3. switches from waiting to ready
+			4. terminates
+		Scheduling  1. and 4. are nonpreemptive
+		Rest is preemtive
+	
+	Dispatcher
+		part of scheduler
+		Soly save program states then load new spot
+		
+	Dispatcher Latency
+		time to stop process and start next
+		
+	***Scheduling Criteria***
+		CPU Utilization
+			keep CPU as busy as possible
+		Throughput
+			# of processes that complete their execution per time unit
+		Turnaround time
+			time to execute particular process
+		Waiting Time
+			time a process has been waiting in queue
+		Response Time
+			time it takes to get first response 
+		
+		Optimization Critera
+			max CPU utilization
+			max throughput
+			min turnaoud time
+			min waiting time
+			min response time
+			
+		Long term scheduler
+			add to pool of process to be executed
+		Med term scheduler
+			add to # of process that are part or full in main mem
+			(Bring back suspended)
+		Short term scheduler
+			ready to running
+		I/O Scheduler
+			which process pending IO request - udpate priority?
+			
+	Selection func
+		w = time spent waiting in sys so far
+		e = time spend in exe
+		s = tot time spent in sys
+		
+	Nonpreemptive process	
+		proccess is running state until ITSELF terminates or blocks
+		
+	Prememptive process
+		current running process, can be interrupted, ready state
+		preemptive may occure when new process arrives or interupt/periodic
+		
+	First Come First Served (FCFS) Scheduling
+		Notpreemptive
+		Avg Waiting time = sum of process time / # of processes
+		Convoy effect - short process run after long process	
+		
+	Shortest Job First (SJF) Scheduling
+		nonpreemptive
+		Associate each process with lenght of next CPU burst
+			schedule with shortest time
+		Optimal min avg wiating time given set of processes	
+			must know length of each request
+		Estimate length of Nth cpu burst
+			Exponential averaging is used:
+				t,n = actual length of nth burst
+				t,n+1` = predicted value for next cpu
+				alpha = 0 <= alpha <= 1. norm 0.5
+				t,n=1 = alpha * t,n + (1-alpha) * t,n
+		preemptive version called shortest remaining time first
+		
+	Priority Scheduling
+		highest priority goes first - runs till done
+		typically smallest number has higest priority
+		SJF is priority scheduling where priority is inverse of predicted
+		Problem 
+			starvation - low process may never exec
+		Solution
+			aging - as time progresses increase priority process
+			typically as promoted in priority it keeps higher priority to complete faster
+			
+	Round RObing
+		time quantum q - usually 10-100 millisecs. then process is preemted and added to end of queue
+
+	LOOK at pdf page 43
+		

@@ -1,0 +1,32 @@
+Priority Scheduling
+  Can be preemptive or nonpreemptive
+
+Multilevel Queue
+    Foreground - interactive
+    background - batch - ex cron jobs
+    May use Round Robin for foreground and FCFS background
+
+
+Process VS Thread - Process Control Block PCB
+    Distinction
+        process has
+        unit of dispatching is called a thread or lightweight process
+        Unit of resource ownership is process/task
+        Multitheading - abiliity of an OS to support multiple threads w/in single process
+
+    Single Threaded
+        Only deal with processes - since all processes  - can have multiple processes
+    Multithreaded
+
+    Threads in a process
+
+    Benefits
+
+    Execution States
+
+    Syncronizations
+
+
+User Level Thread - ULT
+    KERNAL DOESN"T KNOW ABOUT THREADS
+    Threads done by user

@@ -1,0 +1,54 @@
+msaquerader - not meant to be on system but gets on
+misfeasor - allowed on sys but has more control
+clandestine - gains SU access and evade audits - audit collection
+
+watch war games
+
+malware two categories
+    parasitic
+        need another program to run
+    independent
+        scheduled and run by OS
+        worms/bots
+
+Intrusion Detection Systems (IDSs)
+    host based IDS
+        monitor host and reports suspicious ativity
+    network based IDS
+        monitors traffic
+
+IDS Components
+    Sensors - host or network based
+        data collection on anything that contains evidence of an intrusion
+    Analyzers
+        get input from sensor determin if intrusion occured
+    User Interface
+        display info
+
+AA
+    Identification setp
+            giving identifier to security system
+    Authentication Verification step
+            accepts between entity and indentifer        
+    Access Control
+        Specify who/what has access to each resource and what they can do
+    Accountability
+        track user records - save medical financial records
+
+Firewalls
+    1) network choke point must pass through
+    2) enforces local security policy
+    3) secure against attacks
+
+
+Discretionary Acess Control Policy
+    Ex: can I as a user give another user/entity a file/permission
+Role-based Access Control Policy (RBAC)
+    Ex: can I as a role/group give access to another group - ex sales to marketing
+Mandatory Access Control Policy
+    
+For security: Policy of Least Privilaged Access!    
+    
+
+
+    

@@ -1,0 +1,3 @@
+scheduler.o: scheduler.c scheduler.h process.h
+process.o: process.c process.h
+priority_queue.o: priority_queue.c priority_queue.h

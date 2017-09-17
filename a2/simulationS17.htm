@@ -1,0 +1,332 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head></head><body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="WordSection1">
+
+<p class="MsoNormal">CS 4550 OS Fall 2017 Scheduling Assignment</p>
+
+<p class="MsoNormal">Due before class Thursday 9/21, submit zipped or compressed
+files to <span class="SpellE">ELearning</span>.<span>&#160;
+</span>Just the source code and make files, no object files, no executables.</p>
+
+<p class="MsoNormal">You will write code to simulate a running operation system’s
+scheduling of processes.&#160; Your code will be one process/thread only and
+the ‘processes’ are just data structures used in your simulation.</p>
+
+<p class="MsoNormal">Make sure you read this and understand completely what you
+are doing before writing your design and code!</p>
+
+<p class="MsoNormal">Rules for code: </p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">A.<span style="font-size:
+7.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,serif;">&#160;&#160;&#160;&#160;
+</span>Must be C language supported by Visual Studio (VS) or CS department’s
+Ubuntu without installing any new compilers or libraries, as in standard C.
+&#160;<b>Include the complete project
+zipped up with Make files and supporting files.</b>&#160; </p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">B.<span style="font-size:
+7.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,serif;">&#160;&#160;&#160;&#160;
+</span>You must write your own priority queue code not use built in data
+structures so we can see how you chose to implement the algorithm.&#160; </p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">C.<span style="font-size:
+7.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,serif;">&#160;&#160;&#160;&#160;&#160;
+</span>You must credit where you got the algorithms and code you use any part
+of.</p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">D.&#160; Use good modules
+(functions), your main loop should call functions and fit on one screen.</p>
+
+<p class="MsoListParagraph" style="margin-left:.75in;text-indent:-.25in;">Do not
+try to do everything in one function but break it up into logical modules.</p>
+
+<p class="MsoListParagraph" style="margin-left:.75in;text-indent:-.25in;">Write
+the hardest part first so you know what it needs.</p>
+
+<p class="MsoListParagraph" style="margin-left:.75in;text-indent:-.25in;">Write
+the lowest level, test then write what calls it, test.&#160; Do not try to
+write whole thing at once unless you really enjoy wasting your own time.</p>
+
+<p class="MsoNormal" style="margin-bottom:12.0pt;">Here are the rules for all
+programs:</p>
+
+<p class="MsoNormal" style="margin-top:2.0pt;line-height:105%;"><span style="font-size:13.0pt;line-height:105%;font-family:&quot;Calibri Light&quot;,sans-serif;color:#2E74B5;">Rules:</span></p>
+
+<p class="MsoNormal" style="margin-bottom:8.0pt;line-height:105%;">If your code
+does not follow these rules you will have to rewrite it before you get a score.</p>
+
+<p class="MsoNormal" style="margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:.5in;text-indent:-.25in;line-height:105%;"><span style="font-family:
+Symbol;">&#183;</span><span style="font-size:7.0pt;line-height:105%;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</span>Test for an error return from ALL system calls, that includes <b>all </b>semaphore
+calls, fork, etc.</p>
+
+<p class="MsoNormal" style="margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:1.0in;text-indent:-.25in;line-height:105%;"><span style="font-family:
+&quot;Courier New&quot;;">o</span><span style="font-size:7.0pt;line-height:105%;">&#160;&#160;
+</span>If error call <span class="SpellE"><span class="GramE">perror</span></span><span class="GramE">(</span>) unless timer is up for timed wait. (not really an error)</p>
+
+<p class="MsoNormal" style="margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:.5in;text-indent:-.25in;line-height:105%;"><span style="font-family:
+Symbol;">&#183;</span><span style="font-size:7.0pt;line-height:105%;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</span>NO break or continue statements in any loop.</p>
+
+<p class="MsoNormal" style="margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:.5in;text-indent:-.25in;line-height:105%;"><span style="font-family:
+Symbol;">&#183;</span><span style="font-size:7.0pt;line-height:105%;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</span>No global variables, you declare, outside of a function.</p>
+
+<p class="MsoNormal" style="margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:.5in;text-indent:-.25in;line-height:105%;"><span style="font-family:
+Symbol;">&#183;</span><span style="font-size:7.0pt;line-height:105%;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</span>All loops must stop only when false, the Boolean expression in the <span class="GramE">( )</span> after <span class="SpellE">while</span>, or for.</p>
+
+<p class="MsoNormal" style="margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:.5in;text-indent:-.25in;line-height:105%;"><span style="font-family:
+Symbol;">&#183;</span><span style="font-size:7.0pt;line-height:105%;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+</span>All code must be properly formatted with indentation for all blocks <span class="GramE">{ }</span></p>
+
+<ul style="margin-top:0in;" type="disc">
+ <li class="MsoNormal" style="margin-bottom:8.0pt;line-height:105%;"><span>Functions
+     that are not void have one and only one return statement the last line in
+     the function.</span></li>
+ <li class="MsoNormal" style="margin-bottom:8.0pt;line-height:105%;"><span>Must
+     have your name, class name, and assignment name in comments at top of
+     file.</span></li>
+ <li class="MsoNormal" style="margin-bottom:8.0pt;line-height:105%;"><span>Have
+     comments that explain how things work if not completely obvious on first
+     glance.&#160; x—; // No decrement x comment </span><span style="font-family:
+     Wingdings;">J</span><span> which is obvious</span></li>
+</ul>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">&#160;</p>
+
+<p class="MsoNormal">This simulation will assume one processor with one
+core.&#160; It will assume all user processes with kernel taking no time to do
+its work.&#160; How fake is that?</p>
+
+<p class="MsoNormal">Time will be the <b>main
+loop one clock tick per iteration</b>.<span>&#160;
+</span>One time through the loop one clock tick.</p>
+
+<p class="MsoNormal">Priorities should be 0-15 with 0 lowest and 15 highest.</p>
+
+<p class="MsoNormal">You must use the priority queue algorithm adjusting
+priorities each time you add a process to the ready queue.&#160; In the next
+version of this program you will also implement another scheduling algorithm
+from the text book and compare the two.</p>
+
+<p class="MsoNormal">You will also use the Round Robin algorithm so the process
+in the CPU is forced to leave when quantum time is up.</p>
+
+<p class="MsoNormal">You will have 3 * 16 processes, 3 for each priority from
+0-15.&#160; One that is CPU bound, one that is even CPU and I/O and 1 that is
+I/O bound.&#160; CPU bound must want more time than normally allowed in CPU
+before fast I/O spending most time in CPU.&#160; I/O bound should stay in CPU
+much less time than normal CPU time and spend most time waiting for I/O.&#160;
+Even should spend about the same amount of time in CPU as doing I/O.</p>
+
+<p class="MsoNormal">There should be several data structures.&#160; </p>
+
+<p class="MsoNormal" style="margin-left:.5in;">A priority queue of processes ready
+for the CPU.</p>
+
+<p class="MsoNormal" style="margin-left:1.0in;">Each time click (one time around
+the main loop) you adjust priorities and move processes in this queue.</p>
+
+<p class="MsoNormal" style="margin-left:.5in;">A list of processes waiting for I/O</p>
+
+<p class="MsoNormal" style="margin-left:.5in;">A struct of OS parameters common to
+all processes</p>
+
+<p class="MsoNormal" style="margin-left:1.0in;">Max time in CPU before being
+bumped to ready queue if no I/O</p>
+
+<p class="MsoNormal" style="margin-left:1.0in;">Max wait time user processes in
+ready queue (try different times, how small can your scheduling algorithm
+handle?)</p>
+
+<p class="MsoNormal">Each process should keep track of <b>at least</b> the
+following information.</p>
+
+<p class="MsoNormal" style="margin-left:.25in;">Name of process</p>
+
+<p class="MsoNormal" style="margin-left:.25in;">Starting priority, reset current
+priority to this each time process moved into wait queue, does not change.</p>
+
+<p class="MsoNormal" style="margin-left:.25in;">Current priority of the process
+which may change with aging.</p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">A.<span style="font-size:
+7.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,serif;">&#160;&#160;&#160;&#160;
+</span>Time in CPU needed before/between I/O (set once)</p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">B.<span style="font-size:
+7.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,serif;">&#160;&#160;&#160;&#160;
+</span><span class="GramE">Time</span> I/O takes (set once)</p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">C.<span style="font-size:
+7.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,serif;">&#160;&#160;&#160;&#160;&#160;
+</span>Total time in machine not counting time in wait queue (set at startup
+counts down).&#160; How much time process spends doing something before it
+exits.&#160; Sum of total time in CPU and total time in I/O.</p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">D.<span style="font-size:
+7.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,serif;">&#160;&#160;&#160;&#160;
+</span>Time in CPU currently.&#160; Set to 0 when moved into CPU, when reaches
+A or quantum is up moves out of CPU.</p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">E.<span style="font-size:
+7.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,serif;">&#160;&#160;&#160;&#160;&#160;
+</span>Time left waiting for current I/O</p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">F.<span style="font-size:
+7.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,serif;">&#160;&#160;&#160;&#160;&#160;
+</span>Time process has been waiting in ready queue</p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">G.<span style="font-size:
+7.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,serif;">&#160;&#160;&#160;&#160;
+</span>Total time in CPU</p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">H.<span style="font-size:
+7.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,serif;">&#160;&#160;&#160;&#160;
+</span>Total time in I/O</p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">I.<span style="font-size:
+7.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,serif;">&#160;&#160;&#160;&#160;&#160;&#160;
+</span>Total time in ready queue</p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">J.<span style="font-size:
+7.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,serif;">&#160;&#160;&#160;&#160;&#160;&#160;
+</span>Smallest time in ready queue</p>
+
+<p class="MsoListParagraph" style="text-indent:-.25in;">K.<span style="font-size:
+7.0pt;line-height:115%;font-family:&quot;Times New Roman&quot;,serif;">&#160;&#160;&#160;&#160;&#160;
+</span>Longest time in ready queue</p>
+
+<p class="MsoNormal">Other data</p>
+
+<p class="MsoNormal">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+You need to keep track of the current state of each process; you might have a
+field in each process or use which data structure it is in.&#160; In CPU, I/O
+wait, Ready queue ….</p>
+
+<p class="MsoNormal">You should have modules (<span class="GramE">functions(</span>)
+) to </p>
+
+<p class="MsoNormal" style="margin-left:.5in;">Swap process in CPU (how hard would
+it be to simulate this taking time as it does in real life?&#160; Not required
+but think about changing your simulator for latency.&#160; Context switch
+between kernel and user takes even longer in real system)</p>
+
+<p class="MsoNormal" style="margin-left:.5in;">Add process to ready queue</p>
+
+<p class="MsoNormal">Program.</p>
+
+<p class="MsoNormal" style="margin-left:.5in;">Define at least 3 * 16 processes
+with different starting times</p>
+
+<p class="MsoNormal" style="margin-left:.5in;"><span style="background:yellow;">Add
+one to the ready queue, run the loop at least once then add the next.</span></p>
+
+<p class="MsoNormal" style="margin-left:.5in;">loop until all processes exit</p>
+
+<p class="MsoNormal" style="margin-left:1.0in;">Each iteration is <span class="GramE">one time</span> unit.</p>
+
+<p class="MsoNormal" style="margin-left:1.0in;">Adjust time counters in each
+process</p>
+
+<p class="MsoNormal" style="margin-left:1.0in;">swap processes as necessary from
+CPU to either the I/O or ready queue</p>
+
+<p class="MsoNormal" style="margin-left:1.0in;">swap processes from I/O to ready
+queues when I/O time is up</p>
+
+<p class="MsoNormal" style="margin-left:1.0in;">Adjust priority of processes in
+ready queue so no processes <span class="GramE">waits</span> too long and so
+higher priorities run first.</p>
+
+<p class="MsoNormal" style="margin-left:.5in;">After the loop stops and all
+process have exited print the statistics for</p>
+
+<p class="MsoNormal" style="margin-left:.5in;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+the OS setup for time limits </p>
+
+<p class="MsoNormal" style="margin-left:.5in;text-indent:.5in;">each process’s
+stats including total, min and max times</p>
+
+<p class="MsoNormal" style="margin-left:.5in;">All I/O times should be &gt; 2</p>
+
+<p class="MsoNormal" style="margin-left:.5in;">&#160;</p>
+
+<p class="MsoNormal">Document your program:</p>
+
+<p class="MsoNormal" style="margin-left:.5in;">Which scheduling algorithm<b>s</b>
+are you using?&#160; Based on what information source?</p>
+
+<p class="MsoNormal" style="margin-left:.5in;">How does the algorithm handle
+making sure all processes get a chance to run even with high priority CPU bound
+processes?</p>
+
+<span style="font-size:11.0pt;line-height:115%;font-family:&quot;Calibri&quot;,sans-serif;"><br clear="all"/>
+</span>
+
+<p class="MsoNormal">&#160;</p>
+
+<p class="MsoNormal">You can read about real simulations in your text book.&#160;
+Your simulation is more to learn how schedulers work than evaluation of
+algorithms. </p>
+
+<h2><span>Explanation of the
+Round Robin Priority Queue with ageing algorithm, the required one.</span></h2>
+
+<p class="MsoNormal">Priority Scheduling </p>
+
+<p class="MsoNormal">Priority scheduling is when which each job is assigned a
+priority and the job with the highest priority gets scheduled first. </p>
+
+<p class="MsoNormal">Priority scheduling can suffer from a major problem known as
+indefinite blocking, or starvation, in which a low-priority task can wait
+forever because there are always some other jobs around that have higher
+priority. </p>
+
+<p class="MsoNormal">If this problem is allowed to occur, then processes will
+either run eventually when the system load lightens (at say 2:00 <span class="GramE">a.m. )</span>, or will eventually get lost when the system is shut
+down or crashes. (There are rumors of jobs that have been stuck for years<span class="GramE">. )</span> </p>
+
+<p class="MsoNormal">One common solution to this problem is aging, in which
+priorities of jobs increase the longer they wait. Under this scheme a
+low-priority job will eventually get its priority raised high enough that it
+gets run.</p>
+
+<p class="MsoNormal">Round Robin Scheduling</p>
+
+<p class="MsoNormal">CPU bursts are assigned with limits called time quantum.</p>
+
+<p class="MsoNormal">When a process is given the CPU, a timer is set for whatever
+value has been set for a time quantum. </p>
+
+<p class="MsoNormal">If the process finishes its burst before the time quantum
+timer expires, then it is swapped out of the CPU and either exits or is waiting
+for I/O</p>
+
+<p class="MsoNormal">If the timer goes off first, then the process is swapped out
+of the CPU and moved to the ready queue.</p>
+
+<p class="MsoNormal">&#160;</p>
+
+</div>
+
+
+
+
+<script type="text/javascript" src="/d2l/common/math/MathML.js?v=10.7.4.7829-135 "></script><script type="text/javascript">document.addEventListener('DOMContentLoaded', function() { D2LMathML.DesktopInit('https://s.brightspace.com/lib/mathjax/2.6.1/MathJax.js?config=MML_HTMLorMML','https://s.brightspace.com/lib/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'); });</script></body></html>
