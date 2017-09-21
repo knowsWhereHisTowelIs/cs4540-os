@@ -1,47 +1,49 @@
 #include "priority_queue.h"
 // modified from https://rosettacode.org/wiki/Priority_queue#C
 
-void queue_push(heap_t *h, int priority, char *data) {
-    if (h->len + 1 >= h->size) {
-        h->size = h->size ? h->size * 2 : 4;
-        h->nodes = (node_t *)realloc(h->nodes, h->size * sizeof (node_t));
+void priority_queue_push(heap_t *heapPtr, node_t *nodePtr) {
+    // if the heapPtr size needs to be increased malloc more memory
+    heapPtr->len++;
+    if( heapPtr->len >= heapPtr->size ) {
+        heapPtr->size = heapPtr->size ? heapPtr->size * 2 : 4;
+        heapPtr->nodes = (node_t*) realloc(heapPtr->nodes, heapPtr->size * sizeof(node_t));
     }
-    int i = h->len + 1;
+
+    // search down heap for new position and adjust other references
+    int i = heapPtr->len + 1;
     int j = i / 2;
-    while (i > 1 && h->nodes[j].priority > priority) {
-        h->nodes[i] = h->nodes[j];
+    while( i > 1 && heapPtr->nodes[j].priority > nodePtr->priority ) {
+        heapPtr->nodes[i] = heapPtr->nodes[j];
         i = j;
-        j = j / 2;
+        j /= 2;
     }
-    h->nodes[i].priority = priority;
-    h->nodes[i].data = data;
-    h->len++;
+    heapPtr->nodes[i] = *nodePtr;
 }
 
-char *queue_pop(heap_t *h) {
+node_t* priority_queue_pop(heap_t *heapPtr) {
     int i, j, k;
-    if (!h->len) {
+    if ( ! heapPtr->len ) {
         return NULL;
     }
-    char *data = h->nodes[1].data;
-    h->nodes[1] = h->nodes[h->len];
-    h->len--;
+
+    heapPtr->nodes[1] = heapPtr->nodes[heapPtr->len];
+    heapPtr->len--;
     i = 1;
     while (1) {
         k = i;
         j = 2 * i;
-        if (j <= h->len && h->nodes[j].priority < h->nodes[k].priority) {
+        if (j <= heapPtr->len && heapPtr->nodes[j].priority < heapPtr->nodes[k].priority) {
             k = j;
         }
-        if (j + 1 <= h->len && h->nodes[j + 1].priority < h->nodes[k].priority) {
+        if (j + 1 <= heapPtr->len && heapPtr->nodes[j + 1].priority < heapPtr->nodes[k].priority) {
             k = j + 1;
         }
         if (k == i) {
             break;
         }
-        h->nodes[i] = h->nodes[k];
+        heapPtr->nodes[i] = heapPtr->nodes[k];
         i = k;
     }
-    h->nodes[i] = h->nodes[h->len + 1];
-    return data;
+    heapPtr->nodes[i] = heapPtr->nodes[heapPtr->len + 1];
+    return &heapPtr->nodes[i];
 }

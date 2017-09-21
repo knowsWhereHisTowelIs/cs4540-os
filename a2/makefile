@@ -5,13 +5,18 @@ appname := a2
 CXX := gcc
 CXXFLAGS := -std=c99 -Wall -Wstrict-prototypes -Wextra
 
+OBJDIR := "objects"
+
 srcfiles := $(shell find . -name "*.c")
-objects  := $(patsubst %.c, %.o, %.gch, $(srcfiles))
+objects  := $(patsubst %.c, %.o, $(srcfiles))
 
 all: $(appname)
 
 $(appname): $(objects)
+	@mkdir -p $(OBJDIR) # make dir if doesn't exist
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(appname) $(objects) $(LDLIBS)
+	mv ./*.o $(OBJDIR)
+	mv ./*.h.gch $(OBJDIR)
 
 depend: .depend
 
@@ -19,8 +24,13 @@ depend: .depend
 	rm -f ./.depend
 	$(CXX) $(CXXFLAGS) -MM $^>>./.depend;
 
+cleanall: clean
+	rm -f $(appname)
+	@# @$(MAKE) clean
+
 clean:
-	rm -f $(objects)
+	@# remove object files and compiled headers
+	rm -f $(objects) $(patsubst %.c, %.h.gch, $(srcfiles))
 
 dist-clean: clean
 	rm -f *~ .depend

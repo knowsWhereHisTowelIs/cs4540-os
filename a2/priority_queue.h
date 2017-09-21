@@ -17,6 +17,6 @@
         int size;
     } heap_t;
     // ======================== PROTOTYPES =====================================
-    void queue_push(heap_t *h, int priority, char *data);
-    char *queue_pop(heap_t *h);
+    void priority_queue_push(heap_t *heapPtr, node_t *nodePtr);
+    node_t* priority_queue_pop(heap_t *heap);
 #endif

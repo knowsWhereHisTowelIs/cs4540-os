@@ -1,0 +1,23 @@
+Seg fault:
+
+segments
+    using ex program
+    0-1)
+        0) segments READ
+            ex: printf("Hello %s\n", "World");
+        1) text section READ
+            code and more
+                "Hello %s\n", "World" stored here
+
+        where dynamically linked librarys reside -- only link
+        not cloned in fork
+        
+    2) data section READWRITE
+        global variables like stdio etc
+
+    3) stack section READWRITE
+        local variable such as 'i'
+            int main(int argc, char*argv){ int i; ... }
+review stack vs queue
+    stack FILO?
+    queue FIFO?

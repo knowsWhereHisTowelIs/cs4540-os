@@ -5,6 +5,7 @@
 **/
 #include "scheduler.h"
 #include "process.h"
+#include "priority_queue.h"
 
 // priorities 0-15 with 0 lowest
 // 3 processes for each priority, 1 just CPU, 1 evenly CPU & IO bound, 1 that is just IO
@@ -15,14 +16,14 @@
 // list of processes waiting for IO
 // struct of OS params common to all processes, max time in CPU w/o bumped, max wait time
 
-extern processType processes[ SCHEDULER_MAX_PROCESSES ];
+heap_t processes;
+// extern processType processes[ SCHEDULER_MAX_PROCESSES ];
+// heap_t priorityQueues[ PRIORITY_LEVELS ];
 
 // processes list active index
 int activeProcess = 0;
-
 // counter of processes randomly generated
 int processesCreated = 0;
-
 // list of processes waiting for IO
 int processWaitingForIo[ SCHEDULER_MAX_PROCESSES ];
 
@@ -42,6 +43,25 @@ int main(int argc, char* argv[]) {
 }
 
 void createProcess() {
+    // int priorityLevel = 0;
+    process_t process;
+
+    // auto allocate memory and create string
+    char *name;
+    calloc(name, sizeof(char) * 255);
+    asprintf(&name, "Example process name %c", 2);
+
+    char startingPriority;
+    char currentPriority;
+    int ioInBetweenTime;
+    int ioDuration;
+
+    populateProcess(
+        &process, &name, startingPriority,
+        currentPriority, ioInBetweenTime, ioDuration
+    );
+    // extern process_t process;
+
     processesCreated++;
 }
 
@@ -50,7 +70,7 @@ void swapProcesses() {
 }
 
 void executeActiveProcess() {
-    processType process = processes[activeProcess];
+    //processType process = processes[activeProcess];
 }
 
 void ageProcesses() {

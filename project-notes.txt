@@ -1,0 +1,17 @@
+due week before finals
+
+
+Writing Device Drivers
+    run in kernal mode
+    different virtual memory than user mode
+
+
+download source code from my version of unix/linux (maybe kernal development kit)
+compile in debug mode w/optimization shut off
+
+setup 2 machines or virtual machines
+    single step in debug running on another machine
+    will rewrite part of kernal then debug it
+
+2 choices
+    write kernal or install device driver to manipulate the kernal
