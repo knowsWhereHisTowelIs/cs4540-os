@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "process.h"
-#include "priority_queue.h"
+// #include "priority_queue.h"
+#include "array_list.h"
 
 #ifndef MAIN_C
 #define MAIN_C
@@ -26,10 +27,10 @@
     int main(int argc, char* argv[]);
     void initialize(processList_t *processList);
 
-    void createTestProcessList(heap_t *processes, processList_t *processList);
-    void printProcessInfo(heap_t *processes, processList_t *processList);
+    void createTestProcessList(arrayList_t **processes, processList_t *processList);
+    void printProcessInfo(arrayList_t **processes, processList_t *processList);
 
-    void createProcess(heap_t *processes, processList_t *processList);
+    void createProcess(arrayList_t *processes, processList_t *processList);
     char hasProcesses();
     void swapProcesses();
     void executeActiveProcess();

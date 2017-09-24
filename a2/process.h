@@ -33,7 +33,7 @@
         //  You need to keep track of the current state of each process; you might have a field in each process or use which data structure it is in.  In CPU, I/O wait, Ready queue ….
         int state;
         // Name of process
-        char* name[];
+        char** name;
     } process_t;
 
     // ======================== PROTOTYPES =====================================

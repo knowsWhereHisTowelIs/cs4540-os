@@ -1,14 +1,21 @@
 #include "array_list.h"
+#include <stdio.h>
 // https://codereview.stackexchange.com/questions/64423/implementing-an-arraylist
 
 arrayList_t* arraylist_create() {
-    /* Allocate Memory */
     arrayList_t *list = (arrayList_t*) malloc(sizeof(arrayList_t));
-    assert(list != NULL);
+    if (list == NULL) {
+        return NULL;
+    }
+
     list->size = 0;
+    // initialize to 2 element pointers
     list->data = (void**) calloc(2, sizeof(void *));
-    assert(list->data != NULL);
-    list->data[0] = NULL;
+    if (list->data == NULL) {
+        free(list); // Don't leek memory here!
+        return NULL;
+    }
+
     return list;
 }
 

@@ -1,3 +1,4 @@
-scheduler.o: scheduler.c scheduler.h process.h priority_queue.h
+array_list.o: array_list.c array_list.h
+scheduler.o: scheduler.c scheduler.h process.h array_list.h
+priority_queue.o: depricated/priority_queue.c depricated/priority_queue.h
 process.o: process.c process.h
-priority_queue.o: priority_queue.c priority_queue.h
