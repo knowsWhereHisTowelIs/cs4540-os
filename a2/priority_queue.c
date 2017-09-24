@@ -17,6 +17,7 @@ void priority_queue_push(heap_t *heapPtr, node_t *nodePtr) {
         i = j;
         j /= 2;
     }
+    // add node to heap
     heapPtr->nodes[i] = *nodePtr;
 }
 

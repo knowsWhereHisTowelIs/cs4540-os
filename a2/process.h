@@ -37,9 +37,8 @@
     } process_t;
 
     // ======================== PROTOTYPES =====================================
-    char hasProcesses();
     void populateProcess(
         process_t *process, char *name, char startingPriority,
-        char currentPriority, int ioInBetweenTime, int ioDuration
+        int ioInBetweenTime, int ioDuration
     );
 #endif

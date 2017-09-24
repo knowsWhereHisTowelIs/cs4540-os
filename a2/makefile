@@ -14,7 +14,7 @@ all: $(appname)
 
 $(appname): $(objects)
 	@mkdir -p $(OBJDIR) # make dir if doesn't exist
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(appname) $(objects) $(LDLIBS)
+	$(CXX) $(CXXFLAGS) -o $(appname) $(objects)
 	mv ./*.o $(OBJDIR)
 	mv ./*.h.gch $(OBJDIR)
 

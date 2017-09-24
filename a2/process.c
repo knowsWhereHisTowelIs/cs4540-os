@@ -1,15 +1,11 @@
 #include "process.h"
 
-char hasProcesses() {
-    return 1;
-}
-
 void populateProcess(
             process_t *process, char *name, char startingPriority,
-            char currentPriority, int ioInBetweenTime, int ioDuration
+            int ioInBetweenTime, int ioDuration
         ) {
     process->startingPriority = startingPriority;
-    process->currentPriority = currentPriority;
+    process->currentPriority = startingPriority;
     process->ioInBetweenTime = ioInBetweenTime;
     process->ioDuration = ioDuration;
     process->totalTimeInMachine = 0;
