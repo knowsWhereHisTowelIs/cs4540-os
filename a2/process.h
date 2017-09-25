@@ -2,6 +2,12 @@
 #ifndef PROCESS_H
     #define PROCESS_H
     // ======================== DEFINITIONS ====================================
+    #define PROCESS_STATE__SUSPENDED 0
+    #define PROCESS_STATE__CPU 1
+    #define PROCESS_STATE__IOWAIT 2
+    #define PROCESS_STATE__BLOCKED 3
+    #define PROCESS_STATE__COMPLETED -1
+
     // ======================== TYPEDEFS =======================================
     typedef struct {
         // Starting priority, reset current priority to this each time process moved into wait queue, does not change.

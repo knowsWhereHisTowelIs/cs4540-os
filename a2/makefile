@@ -5,18 +5,19 @@ appname := a2
 CXX := gcc
 CXXFLAGS := -std=c99 -Wall -Wstrict-prototypes -Wextra
 
-OBJDIR := "objects"
+OBJDIR := "tmp"
 
 srcfiles := $(shell find . -name "*.c")
 objects  := $(patsubst %.c, %.o, $(srcfiles))
+compiledHeaders  := $(patsubst %.c, %.h.gch, $(srcfiles))
 
 all: $(appname)
 
 $(appname): $(objects)
 	@mkdir -p $(OBJDIR) # make dir if doesn't exist
 	$(CXX) $(CXXFLAGS) -o $(appname) $(objects)
-	mv ./*.o $(OBJDIR)
-	mv ./*.h.gch $(OBJDIR)
+	@mv ./*.o $(OBJDIR)
+	@#rm ./*.h.gch
 
 depend: .depend
 

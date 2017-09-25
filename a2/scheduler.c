@@ -15,55 +15,69 @@
 // struct of OS params common to all processes, max time in CPU w/o bumped, max wait time
 
 int main(int argc, char* argv[]) {
-    // heap array of processes based on priority 0-15
+    // array of processes based on priority 0-15
     arrayList_t **processes = (arrayList_t**) malloc(sizeof(arrayList_t) * PRIORITY_LEVELS);
-    int i;
-    for( i = 0; i < PRIORITY_LEVELS; i++) {
-        processes[i] = arraylist_create();
-    }
-    // arrayList_t processes[PRIORITY_LEVELS];
+    // completed processes
+    arrayList_t *completedProcesses = (arrayList_t*) malloc(sizeof(arrayList_t));
     // process list info
-    processList_t processList;
+    schedulingInfo_t *schedulingInfo;
+    process_t *activeProcess;
 
-    initialize(&processList);
+    int priorityIndex;
+    initialize(schedulingInfo, &processes[0], activeProcess, &priorityIndex);
 
-    //start debugging
-    createTestProcessList(&processes[0], &processList);
-    for(i = 0; i < PRIORITY_LEVELS; i++ ) {
-        printf("%d\n", i);
-    }
-    printProcessInfo(&processes[0], &processList);
-    printf("\n\nExited fine\n\n");
-return 0;
+    //TODO remove
+    createTestProcessList(&processes[0], schedulingInfo);
 
-    while( hasProcesses() ) {
-        // create processes until the predecided 48 have been created
-        if( processList.created < SCHEDULER_MAX_PROCESSES ) {
-            // createProcess(processes[0], &processList);
+    // setActiveProcess(&processes[0], activeProcess, priorityIndex);
+    // round robin through processes working from 0-15 priorities
+    while( hasProcesses(&processes[0]) ) {
+        // int action; ///todo
+        // switch( action ) {
+        //     case ACTION__PROCESS_SWAP:
+        //         ageProcesses(&processes[0]);
+        //         setActiveProcess(&processes[0], activeProcess, schedulingInfo);
+        //     case ACTION__EXECUTE:
+        //     default:
+        //         break;
+        // }
+        executeProcess(activeProcess);
+        if( activeProcess->state == PROCESS_STATE__COMPLETED ) {
+
         }
-        swapProcesses();
-        executeActiveProcess();
-        //TODO maybe change location of ageProcesses
-        ageProcesses();
+        swapProcesses(&processes[0]);
     }
+    printProcessInfo(&processes[0], schedulingInfo);
     // program ran successfully
     return 0;
 }
 
-void initialize(processList_t *processList) {
-    processList->created = 0;
-    processList->activeProcess = 0;
+void initialize(schedulingInfo_t *schedulingInfo, arrayList_t **processes) {
+    schedulingInfo->created = 0;
+    schedulingInfo->activeProcess = 0;
+    initProcessList(processes);
+    setActiveProcess(&processes[0], schedulingInfo);
 }
 
-void createTestProcessList(arrayList_t **processes, processList_t *processList) {
+void initProcessList(arrayList_t **processes) {
+    int i;
+    for( i = 0; i < PRIORITY_LEVELS; i++) {
+        processes[i] = arraylist_create();
+    }
+}
+
+void createTestProcessList(arrayList_t **processes, schedulingInfo_t *schedulingInfo) {
+    //TODO remove
+    printf("\n---------------Creating Process List---------------------------");
+
     for(int priority = 0; priority < PRIORITY_LEVELS; priority++ ) {
         for(int i = 0; i < 1; i++) {
-            processList->created++;
+            schedulingInfo->created++;
             process_t *process;
             char *name;
             // allocate 32 bytes for the string and populate with null
             name = (char*) calloc(sizeof(char), 32);
-            sprintf(name, "Process #:%d", processList->created);
+            sprintf(name, "Process #:%d", schedulingInfo->created);
 
             // random int from 1 to 100
             int ioInBetweenTime = (priority * 100) + (i * 10) + 1;
@@ -71,34 +85,32 @@ void createTestProcessList(arrayList_t **processes, processList_t *processList) 
             populateProcess(
                 process, name, priority, ioInBetweenTime, ioDuration
             );
-            printf("\n\nPOPULATED pri:%d[%d], %s, ioInBetweenTime:%d ioDuration:%d\n", priority, i, name, ioInBetweenTime, ioDuration);
-            printf("PROCESSES %p\n", (void*) processes);
+            printf("\nPOPULATED pri:%d[%d], %s, ioInBetweenTime:%d ioDuration:%d", priority, i, name, ioInBetweenTime, ioDuration);
             arraylist_add(processes[priority], process);
             // arraylist_add(processes, &process);
         }
     }
-    printf("\ncreateTestProcessList end\n");
 }
 
-void printProcessInfo(arrayList_t **processes, processList_t *processList) {
+void printProcessInfo(arrayList_t **processes, schedulingInfo_t *schedulingInfo) {
     for(int priority = 0; priority < PRIORITY_LEVELS; priority++) {
         for( int i = 0; i < 4; i++) {
-            // process_t *process = (process_t*) arraylist_get(&processes[priority], i);
-            // printf("Process priority:%d[%d]\n", process->startingPriority, i);
+            process_t *process = (process_t*) arraylist_get(processes[priority], i);
+            printf("Process priority:%d[%d]\n", process->startingPriority, i);
         }
     }
     // exit(0);
 }
 
-void createProcess(arrayList_t *processes, processList_t *processList) {
+void createProcess(arrayList_t **processes, schedulingInfo_t *schedulingInfo) {
     process_t process;
 
-    processList->created++;
+    schedulingInfo->created++;
 
     char *name;
     // allocate 32 bytes for the string and populate with null
     name = (char*) calloc(sizeof(char), 32);
-    sprintf(name, "Process #:%d", processList->created);
+    sprintf(name, "Process #:%d", schedulingInfo->created);
 
     // set a random starting priority
     // if priority already has all needed find next available priority
@@ -118,18 +130,39 @@ void createProcess(arrayList_t *processes, processList_t *processList) {
     );
 }
 
-char hasProcesses() {
-    return 1;
-}
-
-void swapProcesses() {
+void setActiveProcess(arrayList_t **processes, process_t *process, int *priorityIndex) {
 
 }
 
-void executeActiveProcess() {
+void executeProcess(process_t *processes) {
     //processType process = processes[activeProcess];
 }
 
-void ageProcesses() {
+void swapProcesses(arrayList_t **processes) {
 
+}
+
+void ageProcesses(arrayList_t **processes) {
+    int i;
+    int originalProcessesPriOneSize = processes[1]->size;
+    process_t *process;
+
+    // iterate over all elements of priority 1
+    // move from priority 1 to priority 0
+    for(i = 0; i < originalProcessesPriOneSize; i++) {
+        process = (process_t*) arraylist_get(processes[1], 0);
+        arraylist_add(processes[0], process);
+        arraylist_remove(processes[1], 0, 1);
+    }
+
+    // move all priorities up one level
+    for(i = 2; i < PRIORITY_LEVELS; i++) {
+        int higherPriority = i - 1;
+        processes[higherPriority] = processes[i];
+        processes[i] = NULL;
+    }
+}
+
+char hasProcesses(arrayList_t **processes) {
+    return 1;
 }
