@@ -15,63 +15,69 @@
 // struct of OS params common to all processes, max time in CPU w/o bumped, max wait time
 
 int main(int argc, char* argv[]) {
-    // array of processes based on priority 0-15
-    arrayList_t **processes = (arrayList_t**) malloc(sizeof(arrayList_t) * PRIORITY_LEVELS);
-    // completed processes
-    arrayList_t *completedProcesses = (arrayList_t*) malloc(sizeof(arrayList_t));
     // process list info
-    schedulingInfo_t *schedulingInfo;
-    process_t *activeProcess;
+    schedulingInfo_t *schedulingInfo = (schedulingInfo_t*) malloc(sizeof(schedulingInfo_t*));
 
-    int priorityIndex;
-    initialize(schedulingInfo, &processes[0], activeProcess, &priorityIndex);
-
+    //TODO remove most printfs
+    fprintf(stderr, "Before initialize\n");
+    initialize(schedulingInfo);
+    fprintf(stderr, "After initialize\n");
     //TODO remove
-    createTestProcessList(&processes[0], schedulingInfo);
+    createTestProcessList(schedulingInfo);
+    fprintf(stderr, "After createTestProcessList\n");
 
-    // setActiveProcess(&processes[0], activeProcess, priorityIndex);
+    // load first process
+    swapProcesses(schedulingInfo);
     // round robin through processes working from 0-15 priorities
-    while( hasProcesses(&processes[0]) ) {
-        // int action; ///todo
-        // switch( action ) {
-        //     case ACTION__PROCESS_SWAP:
-        //         ageProcesses(&processes[0]);
-        //         setActiveProcess(&processes[0], activeProcess, schedulingInfo);
-        //     case ACTION__EXECUTE:
-        //     default:
-        //         break;
-        // }
-        executeProcess(activeProcess);
-        if( activeProcess->state == PROCESS_STATE__COMPLETED ) {
-
+    while( hasProcesses(schedulingInfo) ) {
+        switch( getAction(schedulingInfo) ) {
+            case ACTION__SWAP:
+                ageProcesses(schedulingInfo);
+                swapProcesses(schedulingInfo);
+                executeProcess(schedulingInfo);
+                break;
+            case ACTION__EXECUTE:
+                executeProcess(schedulingInfo);
+                break;
+            default:
+                fprintf(stderr, "Invalid action\n");
+                break;
         }
-        swapProcesses(&processes[0]);
+        // if( activeProcess->state == PROCESS_STATE__COMPLETED ) {
+        //
+        // }
+        // increment the time quantum for round robin
+        schedulingInfo->quantums.current++;
     }
-    printProcessInfo(&processes[0], schedulingInfo);
-    // program ran successfully
+
+    // printProcessInfo(schedulingInfo);
+    // printf("After printProcessInfo\n");
     return 0;
 }
 
-void initialize(schedulingInfo_t *schedulingInfo, arrayList_t **processes) {
-    schedulingInfo->created = 0;
-    schedulingInfo->activeProcess = 0;
-    initProcessList(processes);
-    setActiveProcess(&processes[0], schedulingInfo);
-}
-
-void initProcessList(arrayList_t **processes) {
+void initialize(schedulingInfo_t *schedulingInfo) {
     int i;
+    schedulingInfo->quantums.current = 0;
+    schedulingInfo->quantums.lastSwap = 0;
+    schedulingInfo->quantums.lastAge = 0;
+
+    schedulingInfo->created = 0;
+    // array of processes based on priority 0-15
+    schedulingInfo->processes.list = (arrayList_t**) malloc(sizeof(arrayList_t) * PRIORITY_LEVELS);
     for( i = 0; i < PRIORITY_LEVELS; i++) {
-        processes[i] = arraylist_create();
+        schedulingInfo->processes.list[i] = arraylist_create();
     }
+    // initialize array of process list
+    schedulingInfo->processes.completedList = arraylist_create();
+    schedulingInfo->processes.waitingForIoList = arraylist_create();
 }
 
-void createTestProcessList(arrayList_t **processes, schedulingInfo_t *schedulingInfo) {
+void createTestProcessList(schedulingInfo_t *schedulingInfo) {
     //TODO remove
-    printf("\n---------------Creating Process List---------------------------");
+    // fprintf(stderr, "---------------Creating Process List---------------------------");
 
     for(int priority = 0; priority < PRIORITY_LEVELS; priority++ ) {
-        for(int i = 0; i < 1; i++) {
+        for(int i = 0; i < 4; i++) {
             schedulingInfo->created++;
             process_t *process;
             char *name;
@@ -85,24 +91,23 @@ void createTestProcessList(arrayList_t **processes, schedulingInfo_t *scheduling
             populateProcess(
                 process, name, priority, ioInBetweenTime, ioDuration
             );
-            printf("\nPOPULATED pri:%d[%d], %s, ioInBetweenTime:%d ioDuration:%d", priority, i, name, ioInBetweenTime, ioDuration);
-            arraylist_add(processes[priority], process);
-            // arraylist_add(processes, &process);
+            // TODO remove
+            // fprintf(stderr, "POPULATED pri:%d[%d], %s, ioInBetweenTime:%d ioDuration:%d\n", priority, i, name, ioInBetweenTime, ioDuration);
+            arraylist_add(schedulingInfo->processes.list[priority], process);
         }
     }
 }
 
-void printProcessInfo(arrayList_t **processes, schedulingInfo_t *schedulingInfo) {
+void printProcessInfo(schedulingInfo_t *schedulingInfo) {
     for(int priority = 0; priority < PRIORITY_LEVELS; priority++) {
         for( int i = 0; i < 4; i++) {
-            process_t *process = (process_t*) arraylist_get(processes[priority], i);
-            printf("Process priority:%d[%d]\n", process->startingPriority, i);
+            process_t *process = (process_t*) arraylist_get(schedulingInfo->processes.list[priority], i);
+            fprintf(stderr, "Process priority:%d[%d]\n", process->startingPriority, i);
         }
     }
-    // exit(0);
 }
 
-void createProcess(arrayList_t **processes, schedulingInfo_t *schedulingInfo) {
+void createProcess(schedulingInfo_t *schedulingInfo) {
     process_t process;
 
     schedulingInfo->created++;
@@ -116,6 +121,7 @@ void createProcess(arrayList_t **processes, schedulingInfo_t *schedulingInfo) {
     // if priority already has all needed find next available priority
     int index, startingIndex;
     index = rand() % PRIORITY_LEVELS; // select random priority 0-15
+    //TODO finish
     for(startingIndex = index; startingIndex != index; index++) {
         // if
     }
@@ -130,39 +136,95 @@ void createProcess(arrayList_t **processes, schedulingInfo_t *schedulingInfo) {
     );
 }
 
-void setActiveProcess(arrayList_t **processes, process_t *process, int *priorityIndex) {
+void executeProcess(schedulingInfo_t *schedulingInfo) {
 
 }
 
-void executeProcess(process_t *processes) {
-    //processType process = processes[activeProcess];
+void swapProcesses(schedulingInfo_t *schedulingInfo) {
+    // if first iteration or no processes in queue (waiting for more)
+    // set active pointer to first one of highest priority
+    if( schedulingInfo->processes.active->ptr == NULL ) {
+        // test if processes still in highest priority level 0-15
+        swapProcessesLoop(schedulingInfo, 1, 0, 0);
+    } else {
+        // current process is running - set to next highest priority
+        char foundProcess = 0;
+        int element = schedulingInfo->processes.active->arrayIndex;
+        int priority = schedulingInfo->processes.active->priority;
+        foundProcess = swapProcessesLoop(schedulingInfo, 1, element, priority);
+        if( foundProcess == 0 ) {
+            foundProcess = swapProcessesLoop(schedulingInfo, -1, element, priority);
+        }
+        if( foundProcess == 0 ) {
+            // TODO remove
+            fprintf(stderr, "\nSetting active process to null");
+            schedulingInfo->processes.active = NULL;
+        }
+    }
 }
 
-void swapProcesses(arrayList_t **processes) {
+/**
+ * @param schedulingInfo_t* schedulingInfo
+ * @param int incrementer either 1 or -1
+ * @param int element set to element offset or 0
+ * @param int priority set to starting priority or 0
+**/
+char swapProcessesLoop(schedulingInfo_t *schedulingInfo, int incrementer, int element, int priority) {
+    char foundProcess = 0;
+    int i, j;
+    size_t priorityListLen;
 
+    for(i = priority; i >= 0 && i < PRIORITY_LEVELS && foundProcess == 0; i += incrementer) {
+        priorityListLen = arraylist_getsize(schedulingInfo->processes.list[i]);
+        for(j = element; (unsigned) j < priorityListLen && foundProcess == 0; j++) {
+            schedulingInfo->processes.active->priority = i;
+            schedulingInfo->processes.active->arrayIndex = j;
+            schedulingInfo->processes.active->ptr = (process_t*) arraylist_get(schedulingInfo->processes.list[i], j);
+            foundProcess = 1;
+        }
+    }
+    return foundProcess;
 }
 
-void ageProcesses(arrayList_t **processes) {
+void ageProcesses(schedulingInfo_t *schedulingInfo) {
     int i;
-    int originalProcessesPriOneSize = processes[1]->size;
+    int originalProcessesPriOneSize = schedulingInfo->processes.list[1]->size;
     process_t *process;
 
     // iterate over all elements of priority 1
     // move from priority 1 to priority 0
     for(i = 0; i < originalProcessesPriOneSize; i++) {
-        process = (process_t*) arraylist_get(processes[1], 0);
-        arraylist_add(processes[0], process);
-        arraylist_remove(processes[1], 0, 1);
+        process = (process_t*) arraylist_get(schedulingInfo->processes.list[1], 0);
+        arraylist_add(schedulingInfo->processes.list[0], process);
+        arraylist_remove(schedulingInfo->processes.list[1], 0, 1);
     }
-
     // move all priorities up one level
     for(i = 2; i < PRIORITY_LEVELS; i++) {
         int higherPriority = i - 1;
-        processes[higherPriority] = processes[i];
-        processes[i] = NULL;
+        schedulingInfo->processes.list[higherPriority] = schedulingInfo->processes.list[i];
+        schedulingInfo->processes.list[i] = NULL;
     }
 }
 
-char hasProcesses(arrayList_t **processes) {
-    return 1;
+char hasProcesses(schedulingInfo_t *schedulingInfo) {
+    int completed = arraylist_getsize(schedulingInfo->processes.completedList);
+    return (completed == schedulingInfo->created) ? 0 : 1;
+}
+
+char getAction(schedulingInfo_t *schedulingInfo) {
+    char action;
+    uint32_t quantumsSinceSwap = schedulingInfo->quantums.current - schedulingInfo->quantums.lastSwap;
+
+    if( schedulingInfo->processes.active == NULL ) {
+        action = ACTION__SWAP;
+    } else if ( quantumsSinceSwap < TIME_QUANTUM ) {
+        if( schedulingInfo->processes.active->ptr->state == PROCESS_STATE__CPU ) {
+            action = ACTION__EXECUTE;
+        } else {
+            action = ACTION__BLOCK;
+        }
+    } else {
+        action = ACTION__SWAP;
+    }
+    return action;
 }
