@@ -1,5 +1,4 @@
 #include "array_list.h"
-#include <stdio.h>
 // https://codereview.stackexchange.com/questions/64423/implementing-an-arraylist
 
 arrayList_t* arraylist_create() {
@@ -9,8 +8,8 @@ arrayList_t* arraylist_create() {
     }
 
     list->size = 0;
-    // initialize to 2 element pointers
-    list->data = (void**) calloc(2, sizeof(void *));
+    // initialize to ARRAYLIST_DEFAULT_SIZE element pointers
+    list->data = (void**) calloc(ARRAYLIST_DEFAULT_SIZE, sizeof(void *));
     if (list->data == NULL) {
         free(list); // Don't leek memory here!
         return NULL;
@@ -30,10 +29,17 @@ void arraylist_setdata(arrayList_t *list, void ** data, int max, int clear_data)
 
 void arraylist_add(arrayList_t *list, void *elem) {
     // Adds one element of generic pointer type to the internal array
-    void ** new_data = (void**) realloc(list->data, arraylist_getsizeof(list));
-    assert(new_data != NULL);
-    new_data[list->size] = elem;
-    arraylist_setdata(list, new_data, list->size + 1, 0);
+    // void **new_data = (void**) realloc(list->data, arraylist_getsizeof(list));
+
+    // void **new_data = (void**) malloc(arraylist_getsizeof(list) + sizeof(elem));
+    // for(int i = 0; i < list->size; i++) {
+    //     new_data[i] = list->data[i];
+    // }
+    // new_data[list->size] = elem;
+
+    // assert(new_data != NULL);
+    list->data[list->size] = elem;
+    arraylist_setdata(list, list->data, list->size + 1, 0);
 }
 
 void *arraylist_get(arrayList_t *list, int index) {
@@ -45,6 +51,7 @@ size_t arraylist_getsizeof(arrayList_t *list) {
     // Returns the size of the internal array in memory
     return sizeof(*list->data);
 }
+
 size_t arraylist_getsize(arrayList_t *list) {
     // Returns the number of elements in the arraylist
     return list->size;
@@ -69,10 +76,14 @@ void arraylist_remove(arrayList_t *list, int index, int freeit) {
             list->data[i] = list->data[i + 1];
         }
     }
-    void ** new_data = (void**) realloc(list->data, arraylist_getsizeof(list));
+    fprintf(stderr, "\nB4 Realloc");
+    // void **new_data = (void**) realloc(list->data, arraylist_getsizeof(list));
+    // --list->size;
+    // assert(new_data != NULL);
+    // arraylist_setdata(list, new_data, list->size, 0);
+
     --list->size;
-    assert(new_data != NULL);
-    arraylist_setdata(list, new_data, list->size, 0);
+    arraylist_setdata(list, list->data, list->size, 0);
 }
 
 void arraylist_clear(arrayList_t *list) {

@@ -1,9 +1,11 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
 
 #ifndef ARRAY_LIST_C
     #define ARRAY_LIST_C
     // ======================== DEFINITIONS ====================================
+    #define ARRAYLIST_DEFAULT_SIZE 64
     // ======================== TYPEDEFS =======================================
     typedef struct {
         size_t size;

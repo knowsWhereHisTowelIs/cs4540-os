@@ -18,9 +18,10 @@
     // After the set amount of time passes increase the priority of all processes
     #define TIME_QUANTUM_BETWEEN_AGING 256
     // scheduler actions
-    #define ACTION__BLOCK -1
-    #define ACTION__SWAP 1
-    #define ACTION__EXECUTE 2
+    #define ACTION__ERROR   -1
+    #define ACTION__EXECUTE 0
+    #define ACTION__BLOCK   1
+    #define ACTION__SWAP    2
 
     // ================= TYPEDEFS ====================
     typedef struct {
@@ -32,9 +33,9 @@
     typedef struct {
         // increases once per loop
         struct {
-            uint64_t current;
-            uint64_t lastSwap;
-            uint64_t lastAge;
+            uint32_t current;
+            uint32_t lastSwap;
+            uint32_t lastAge;
         } quantums;
         // counter of processes generated
         int created;
@@ -48,13 +49,16 @@
             arrayList_t *completedList;
             // list of `processInfo_t` processes waiting for IO
             arrayList_t *waitingForIoList;
+            // list of `processInfo_t` of processes not yet ran
+            arrayList_t *toRun;
         } processes;
     } schedulingInfo_t;
     // ================= PROTOTYPES ====================
     int main(int argc, char* argv[]);
     void initialize(schedulingInfo_t *schedulingInfo);
     void createTestProcessList(schedulingInfo_t *schedulingInfo);
-    void printProcessInfo(schedulingInfo_t *schedulingInfo);
+    void printProcessList(schedulingInfo_t *schedulingInfo);
+    void printProcessInfo(process_t *process);
     void createProcess(schedulingInfo_t *schedulingInfo);
     void executeProcess(schedulingInfo_t *schedulingInfo);
     void swapProcesses(schedulingInfo_t *schedulingInfo);

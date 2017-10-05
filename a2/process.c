@@ -2,11 +2,13 @@
 
 void populateProcess(
             process_t *process, char *name, char startingPriority,
-            int ioInBetweenTime, int ioDuration
+            uint32_t ioTriggeredInterval, uint32_t ioDuration, int startTime, int runTime
         ) {
     process->startingPriority = startingPriority;
     process->currentPriority = startingPriority;
-    process->ioInBetweenTime = ioInBetweenTime;
+    process->startTime = startTime;
+    process->runTime = runTime;
+    process->ioTriggeredInterval = ioTriggeredInterval;
     process->ioDuration = ioDuration;
     process->totalTimeInMachine = 0;
     process->timeInCpu = 0;
@@ -17,6 +19,6 @@ void populateProcess(
     process->totalTimeInReadyQueue = 0;
     process->smallestTimeInQueue = 0;
     process->longestTimeInReadyQueue = 0;
-    process->state = 0;
-    *process->name = name;
+    process->state = PROCESS_STATE__SUSPENDED;
+    process->name = name;
 }
