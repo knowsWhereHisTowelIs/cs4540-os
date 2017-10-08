@@ -1,5 +1,6 @@
 #include "array_list.h"
 // https://codereview.stackexchange.com/questions/64423/implementing-an-arraylist
+// @see https://stackoverflow.com/questions/3732856/arraylist-in-c-not-working
 
 arrayList_t* arraylist_create() {
     arrayList_t *list = (arrayList_t*) malloc(sizeof(arrayList_t));
@@ -38,8 +39,17 @@ void arraylist_add(arrayList_t *list, void *elem) {
     // new_data[list->size] = elem;
 
     // assert(new_data != NULL);
-    list->data[list->size] = elem;
-    arraylist_setdata(list, list->data, list->size + 1, 0);
+//    list->data[list->size] = elem;
+//    arraylist_setdata(list, list->data, list->size + 1, 0);
+
+    int size = arraylist_getsize(list);
+    void **new_data;
+    new_data = realloc(list->data, (size + 1) * sizeof new_data[0]);
+    if (new_data) {
+        new_data[size] = elem;
+        list->data = new_data;
+        list->size++;
+    }
 }
 
 void *arraylist_get(arrayList_t *list, int index) {
@@ -77,13 +87,15 @@ void arraylist_remove(arrayList_t *list, int index, int freeit) {
         }
     }
     fprintf(stderr, "\nB4 Realloc");
-    // void **new_data = (void**) realloc(list->data, arraylist_getsizeof(list));
-    // --list->size;
-    // assert(new_data != NULL);
-    // arraylist_setdata(list, new_data, list->size, 0);
 
-    --list->size;
-    arraylist_setdata(list, list->data, list->size, 0);
+    void **new_data = (void**) realloc(list->data, arraylist_getsizeof(list));
+    list->size--;
+    assert(new_data != NULL);
+    arraylist_setdata(list, new_data, list->size, 0);
+
+//    --list->size;
+//    arraylist_setdata(list, list->data, list->size, 0);
+
 }
 
 void arraylist_clear(arrayList_t *list) {

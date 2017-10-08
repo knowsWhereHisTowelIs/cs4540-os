@@ -1,0 +1,126 @@
+cc    -c -o array_list.o array_list.c
+cc    -c -o main.o main.c
+cc    -c -o def.o def.c
+gcc -std=c99 -Wall -Wstrict-prototypes -Wextra -g -o a2  ./array_list.o  ./main.o  ./def.o
+valgrind --leak-check=yes --track-origins=yes -v ./a2
+==13923== Memcheck, a memory error detector
+==13923== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==13923== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==13923== Command: ./a2
+==13923== 
+--13923-- Valgrind options:
+--13923--    --leak-check=yes
+--13923--    --track-origins=yes
+--13923--    -v
+--13923-- Contents of /proc/version:
+--13923--   Linux version 4.4.0-77-generic (buildd@lgw01-59) (gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.4) ) #98-Ubuntu SMP Wed Apr 26 08:34:02 UTC 2017
+--13923-- 
+--13923-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3
+--13923-- Page sizes: currently 4096, max supported 4096
+--13923-- Valgrind library directory: /usr/lib/valgrind
+--13923-- Reading syms from /home/callmetim/Dropbox/current_semester/ece4540-os/arraylist-test/a2
+--13923-- Reading syms from /lib/x86_64-linux-gnu/ld-2.23.so
+--13923--   Considering /lib/x86_64-linux-gnu/ld-2.23.so ..
+--13923--   .. CRC mismatch (computed 10768843 wanted ef0d0121)
+--13923--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/ld-2.23.so ..
+--13923--   .. CRC is valid
+--13923-- Reading syms from /usr/lib/valgrind/memcheck-amd64-linux
+--13923--   Considering /usr/lib/valgrind/memcheck-amd64-linux ..
+--13923--   .. CRC mismatch (computed eea41ea9 wanted 2009db78)
+--13923--    object doesn't have a symbol table
+--13923--    object doesn't have a dynamic symbol table
+--13923-- Scheduler: using generic scheduler lock implementation.
+--13923-- Reading suppressions file: /usr/lib/valgrind/default.supp
+==13923== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-13923-by-callmetim-on-???
+==13923== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-13923-by-callmetim-on-???
+==13923== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-13923-by-callmetim-on-???
+==13923== 
+==13923== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==13923== don't want to do, unless you know exactly what you're doing,
+==13923== or are doing some strange experiment):
+==13923==   /usr/lib/valgrind/../../bin/vgdb --pid=13923 ...command...
+==13923== 
+==13923== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==13923==   /path/to/gdb ./a2
+==13923== and then give GDB the following command
+==13923==   target remote | /usr/lib/valgrind/../../bin/vgdb --pid=13923
+==13923== --pid is optional if only one valgrind process is running
+==13923== 
+--13923-- REDIR: 0x401cdc0 (ld-linux-x86-64.so.2:strlen) redirected to 0x3809e181 (???)
+--13923-- Reading syms from /usr/lib/valgrind/vgpreload_core-amd64-linux.so
+--13923--   Considering /usr/lib/valgrind/vgpreload_core-amd64-linux.so ..
+--13923--   .. CRC mismatch (computed 2567ccf6 wanted 49420590)
+--13923--    object doesn't have a symbol table
+--13923-- Reading syms from /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so
+--13923--   Considering /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so ..
+--13923--   .. CRC mismatch (computed 0e27c9a8 wanted ac585421)
+--13923--    object doesn't have a symbol table
+==13923== WARNING: new redirection conflicts with existing -- ignoring it
+--13923--     old: 0x0401cdc0 (strlen              ) R-> (0000.0) 0x3809e181 ???
+--13923--     new: 0x0401cdc0 (strlen              ) R-> (2007.0) 0x04c31020 strlen
+--13923-- REDIR: 0x401b710 (ld-linux-x86-64.so.2:index) redirected to 0x4c30bc0 (index)
+--13923-- REDIR: 0x401b930 (ld-linux-x86-64.so.2:strcmp) redirected to 0x4c320d0 (strcmp)
+--13923-- REDIR: 0x401db20 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4c35270 (mempcpy)
+--13923-- Reading syms from /lib/x86_64-linux-gnu/libc-2.23.so
+--13923--   Considering /lib/x86_64-linux-gnu/libc-2.23.so ..
+--13923--   .. CRC mismatch (computed f3344b67 wanted 8e4ae80b)
+--13923--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libc-2.23.so ..
+--13923--   .. CRC is valid
+--13923-- REDIR: 0x4ec8e50 (libc.so.6:strcasecmp) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--13923-- REDIR: 0x4ec46d0 (libc.so.6:strcspn) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--13923-- REDIR: 0x4ecb140 (libc.so.6:strncasecmp) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--13923-- REDIR: 0x4ec6b40 (libc.so.6:strpbrk) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--13923-- REDIR: 0x4ec6ed0 (libc.so.6:strspn) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--13923-- REDIR: 0x4ec859b (libc.so.6:memcpy@GLIBC_2.2.5) redirected to 0x4a286f0 (_vgnU_ifunc_wrapper)
+--13923-- REDIR: 0x4ec6850 (libc.so.6:rindex) redirected to 0x4c308a0 (rindex)
+--13923-- REDIR: 0x4ebd580 (libc.so.6:malloc) redirected to 0x4c2db20 (malloc)
+--13923-- REDIR: 0x4ecfbb0 (libc.so.6:strchrnul) redirected to 0x4c34da0 (strchrnul)
+Creating Array 0
+--13923-- REDIR: 0x4ebe160 (libc.so.6:calloc) redirected to 0x4c2faa0 (calloc)
+B4 STR CPY
+Add realloc ptr:85996240 size:8 size2:8
+--13923-- REDIR: 0x4ebdb10 (libc.so.6:realloc) redirected to 0x4c2fce0 (realloc)
+B4 STR CPY
+Add realloc ptr:85996528 size:8 size2:16
+B4 STR CPY
+Add realloc ptr:85996816 size:8 size2:24
+B4 STR CPY
+Add realloc ptr:85997104 size:8 size2:32
+Print Arr
+
+B4 get 0x5203280, 0
+B4 ERR
+PRINT:> I: 0 STR:'ELEM counter:0'
+B4 get 0x5203280, 1
+B4 ERR
+PRINT:> I: 1 STR:'ELEM counter:1'
+B4 get 0x5203280, 2
+B4 ERR
+PRINT:> I: 2 STR:'ELEM counter:2'
+B4 get 0x5203280, 3
+B4 ERR
+PRINT:> I: 3 STR:'ELEM counter:3'
+
+PROCESS DONE
+--13923-- REDIR: 0x4ebd940 (libc.so.6:free) redirected to 0x4c2ed80 (free)
+==13923== 
+==13923== HEAP SUMMARY:
+==13923==     in use at exit: 824 bytes in 11 blocks
+==13923==   total heap usage: 15 allocs, 4 frees, 888 bytes allocated
+==13923== 
+==13923== Searching for pointers to 11 not-freed blocks
+==13923== Checked 65,888 bytes
+==13923== 
+==13923== 824 (512 direct, 312 indirect) bytes in 1 blocks are definitely lost in loss record 5 of 5
+==13923==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==13923==    by 0x400E69: main (in /home/callmetim/Dropbox/current_semester/ece4540-os/arraylist-test/a2)
+==13923== 
+==13923== LEAK SUMMARY:
+==13923==    definitely lost: 512 bytes in 1 blocks
+==13923==    indirectly lost: 312 bytes in 10 blocks
+==13923==      possibly lost: 0 bytes in 0 blocks
+==13923==    still reachable: 0 bytes in 0 blocks
+==13923==         suppressed: 0 bytes in 0 blocks
+==13923== 
+==13923== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==13923== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)

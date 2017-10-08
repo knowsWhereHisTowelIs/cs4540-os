@@ -1,0 +1,3 @@
+array_list.o: array_list.c array_list.h def.h
+main.o: main.c def.h array_list.h
+def.o: def.c def.h
